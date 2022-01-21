@@ -1,0 +1,27 @@
+# I use 3.8 last version
+version: '3.8'
+services:
+  postgres:
+    container_name: msk
+    # Last version Postgres image from DockerHub
+    image: postgres:latest
+    # User: root - Password: 1234
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      PGDATA: /data/postgres
+    volumes:
+      - "./dbdata:/var/lib/postgresql/data"
+    # Use 5433 port
+    ports:
+      - "5433:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
