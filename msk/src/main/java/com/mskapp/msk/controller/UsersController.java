@@ -19,10 +19,10 @@ public class UsersController {
         this.usersServ = usersServ;
     }
 
-    @GetMapping("/sgin up")
+    @GetMapping("/signup")
     public String getSgin_upPage(Model model) {
-        model.addAttribute("sginUpRequest", new UsersModell());
-        return "sgin_upPage";
+        model.addAttribute("signUpRequest", new UsersModell());
+        return "sign_upPage";
     }
 
 
@@ -33,11 +33,20 @@ public class UsersController {
     }
 
 
-    @PostMapping("/sgin_up")
+    @PostMapping("/signup")
     public String sgin_up(@ModelAttribute UsersModell usersModell){
-        System.out.println("sgin_up request: " +usersModell);
-        UsersModell sginup_User = usersServ.sginUp_users(usersModell.getUser_name(), usersModell.getEmail(), usersModell.getPassword());
-        return sginup_User == null ? "error_page" : "redirect:/login";
+        System.out.println("sign_up request: " +usersModell);
+        UsersModell signup_User = usersServ.signUp_users
+                (
+                usersModell.getEmail(),
+                usersModell.getPassword(),
+                usersModell.getFirst_name(),
+                usersModell.getLast_name(),
+                usersModell.getGender(),
+                usersModell.getDate_of_birth()
+                );
+
+        return signup_User == null ? "error_page" : "redirect:/login";
 
     }
 
@@ -46,7 +55,7 @@ public class UsersController {
         System.out.println("login request: " +usersModell);
         UsersModell validate = usersServ.validate(usersModell.getEmail(), usersModell.getPassword());
         if(validate != null){
-            model.addAttribute("usersLogin", validate.getUser_name());
+            model.addAttribute("usersLogin", validate.getFirst_name());
            return "home_page";
         }else {
             return "error_page";
